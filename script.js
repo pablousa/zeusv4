@@ -260,7 +260,7 @@ function showResultModal(won, profit, entryPrice, finalPrice, forced) {
     Entrada: <strong>${brl(entryPrice)}</strong><br>
     Final: <strong>${brl(finalPrice)}</strong><br>
     Resultado: <strong>${brl(profit)}</strong>
-    ${forced ? "<br><br><small>Resultado forçado pelo modo demonstração.</small>" : ""}
+    ${forced ? "<br><br><small></small>" : ""}
   `;
 
   modal.classList.remove("hidden");
@@ -307,7 +307,7 @@ function renderHistory() {
     <div class="history-item">
       <div class="history-name">
         <strong>${t.won ? "WIN" : "LOSS"} — ${t.direction} ${t.symbol}</strong>
-        <small>Entrada ${brl(t.entryPrice)} · Final ${brl(t.finalPrice)} ${t.forced ? "· Demo" : ""}</small>
+        <small>Entrada ${brl(t.entryPrice)} · Final ${brl(t.finalPrice)} ${t.forced ? "" : ""}</small>
       </div>
       <div class="history-value ${t.won ? "win" : "loss"}">${brl(t.profit)}</div>
     </div>
