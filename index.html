@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zeus Holding — Expiry Market</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-grid"></div>
+
+  <header>
+    <div class="brand">
+      <div class="logo">Z</div>
+      <div>
+        <strong>ZEUS <span>HOLDING</span></strong>
+        <small>Expiry Market Simulation</small>
+      </div>
+    </div>
+
+    <nav>
+      <button onclick="showPage('home')">Início</button>
+      <button onclick="showPage('market')">Mercado</button>
+      <button onclick="showPage('results')">Resultados</button>
+      <button onclick="showPage('about')">Institucional</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" class="page active">
+      <div class="hero">
+        <div>
+          <div class="tag">● Simulação de operações com expiração</div>
+          <h1>Mercado fictício com BUY/SELL e <span>resultado automático.</span></h1>
+          <p>
+            Escolha um ativo, defina o capital, escolha BUY ou SELL e aguarde a expiração.
+            No final, o sistema compara o preço de entrada com o preço final.
+          </p>
+
+          <div class="hero-actions">
+            <button class="primary" onclick="showPage('market')">Entrar no Mercado</button>
+            <button class="secondary" onclick="showPage('results')">Ver Resultados</button>
+          </div>
+        </div>
+
+        <div class="glass-card account-card">
+          <small>Saldo fictício</small>
+          <h2 id="homeCash">R$ 10.000,00</h2>
+
+          <div class="mini-grid">
+            <div><span>Operação aberta</span><strong id="homeOpenTrade">Nenhuma</strong></div>
+            <div><span>Resultado total</span><strong id="homeProfit">R$ 0,00</strong></div>
+            <div><span>Operações</span><strong id="homeTrades">0</strong></div>
+            <div><span>Mercado</span><strong class="online">Ao vivo</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="market" class="page">
+      <div class="section-title">
+        <div>
+          <h2>Mercado <span>Zeus</span></h2>
+          <p>Operações fictícias com expiração, contagem regressiva e resultado automático.</p>
+        </div>
+
+        <div class="wallet">
+          <small>Saldo disponível</small>
+          <strong id="cashDisplay">R$ 10.000,00</strong>
+        </div>
+      </div>
+
+      <div class="market-layout">
+        <aside class="stock-list glass-card">
+          <h3>Ativos</h3>
+          <div id="stocks"></div>
+
+          <div class="admin-box">
+            <button class="admin-toggle" onclick="toggleAdmin()">Modo demonstração</button>
+            <div id="adminPanel" class="admin-panel">
+              <label>
+                <input type="checkbox" id="forceWin" />
+                Forçar vitória para teste
+              </label>
+              <small>Modo de teste visível apenas nesta simulação local.</small>
+            </div>
+          </div>
+        </aside>
+
+        <section class="trading-panel glass-card">
+          <div class="asset-top">
+            <div>
+              <small>Ativo selecionado</small>
+              <h2 id="selectedSymbol">ZEUS3</h2>
+              <p id="selectedName">Zeus Holding ON</p>
+            </div>
+            <div class="asset-price">
+              <small>Preço atual</small>
+              <strong id="selectedPrice">R$ 84,72</strong>
+              <span id="selectedChange" class="positive">+0,00%</span>
+            </div>
+          </div>
+
+          <div class="chart-toolbar">
+            <div class="live-pill"><span></span> LIVE</div>
+            <div class="expiry-pill">Expiração: <strong id="expiryLabel">60s</strong></div>
+          </div>
+
+          <div class="chart-box">
+            <svg viewBox="0 0 900 330" preserveAspectRatio="none">
+              <path id="chartArea" d="" fill="rgba(25,195,125,.10)"></path>
+              <path id="chartLine" d="" fill="none" stroke="#19c37d" stroke-width="4" stroke-linecap="round"></path>
+            </svg>
+
+            <div class="price-line" id="priceLine"></div>
+            <div class="price-badge" id="priceBadge">R$ 84,72</div>
+            <div class="entry-line" id="entryLine"></div>
+            <div class="entry-badge" id="entryBadge">Entrada</div>
+          </div>
+
+          <div id="openTradeBox" class="open-trade hidden">
+            <div>
+              <small>Operação aberta</small>
+              <strong id="openTradeText">BUY ZEUS3</strong>
+            </div>
+            <div>
+              <small>Preço de entrada</small>
+              <strong id="entryPriceText">R$ 0,00</strong>
+            </div>
+            <div>
+              <small>Tempo restante</small>
+              <strong id="countdownText">60s</strong>
+            </div>
+          </div>
+
+          <div class="order-box">
+            <div class="field">
+              <label>Capital da operação</label>
+              <input id="capitalInput" type="number" value="500" min="1" />
+            </div>
+
+            <div class="field">
+              <label>Duração</label>
+              <select id="durationInput">
+                <option value="15">15 segundos</option>
+                <option value="30">30 segundos</option>
+                <option value="60" selected>1 minuto</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Retorno em caso de vitória</label>
+              <div class="fake-input">87%</div>
+            </div>
+
+            <div class="field">
+              <label>Direção</label>
+              <div class="mode-box">
+                <button id="buyBtn" class="buy active-mode" onclick="setMode('BUY')">BUY</button>
+                <button id="sellBtn" class="sell" onclick="setMode('SELL')">SELL</button>
+              </div>
+            </div>
+
+            <button id="executeBtn" class="execute" onclick="executeTrade()">Executar ordem</button>
+            <p class="notice">Simulação fictícia. Não realiza operações reais e não representa recomendação financeira.</p>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section id="results" class="page">
+      <div class="section-title">
+        <div>
+          <h2>Resultados <span>Zeus</span></h2>
+          <p>Histórico das operações finalizadas.</p>
+        </div>
+      </div>
+
+      <div class="portfolio-grid">
+        <div class="glass-card">
+          <h3>Resumo</h3>
+          <div class="summary-line"><span>Saldo atual</span><strong id="rCash">R$ 10.000,00</strong></div>
+          <div class="summary-line"><span>Lucro/Prejuízo total</span><strong id="rProfit">R$ 0,00</strong></div>
+          <div class="summary-line"><span>Operações totais</span><strong id="rTrades">0</strong></div>
+        </div>
+
+        <div class="glass-card history">
+          <h3>Histórico</h3>
+          <div id="historyList" class="positions-empty">Nenhuma operação finalizada.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="page">
+      <div class="about glass-card">
+        <h2>Zeus Holding</h2>
+        <p>
+          Interface institucional fictícia para simulação de mercado com expiração.
+          O gráfico é gerado localmente no navegador e não usa dados reais da bolsa.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <div id="resultModal" class="modal hidden">
+    <div class="modal-card">
+      <h2 id="modalTitle">Resultado</h2>
+      <p id="modalText"></p>
+      <button onclick="closeModal()">Fechar</button>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

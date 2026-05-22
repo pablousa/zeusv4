@@ -1,0 +1,12 @@
+{
+  "name": "zeus-holding-expiry-market",
+  "version": "1.0.0",
+  "description": "Interface ficticia com expiracao e modo demonstracao",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
